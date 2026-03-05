@@ -1,0 +1,7 @@
+[33mfa340d6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/prac3[m[33m, [m[1;31morigin/feature/prac3[m[33m)[m HEAD@{0}: commit: Endpoints completos: registro, búsquedas PDF y funciones extra de marca y servicios
+[33m90bd9d5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/dev[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: reset: moving to HEAD~1
+[33m589a5af[m HEAD@{2}: reset: moving to HEAD~1
+[33m9e43d42[m HEAD@{3}: commit: Endpoints de registro y búsqueda funcionando al 100%
+[33m589a5af[m HEAD@{4}: commit: commit de la practica3
+[33m90bd9d5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/dev[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{5}: checkout: moving from main to feature/prac3
+[33m90bd9d5[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/dev[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{6}: clone: from https://github.com/hectormadrisanch/Arquitectura-del-Software.git
