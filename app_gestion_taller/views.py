@@ -104,3 +104,36 @@ def buscar_servicios_de_coche(request, coche_id):
         return JsonResponse({"coche": coche.id, "servicios": servicios})
     except Coche.DoesNotExist:
         return JsonResponse({"error": "Coche no encontrado"}, status=404)
+    
+
+@csrf_exempt
+def buscar_cliente(request, cliente_id):
+    try:
+        # Usamos .values() para obtener un diccionario listo para JSON [cite: 110, 116]
+        cliente = Cliente.objects.values("id", "nombre", "telefono", "email").get(id=cliente_id)
+        return JsonResponse(cliente)
+    except Cliente.DoesNotExist:
+        # Si el ID no existe, devolvemos un error 404 [cite: 114, 117]
+        return JsonResponse({"error": "Cliente no encontrado"}, status=404)
+
+
+@csrf_exempt
+def buscar_coches_de_cliente(request, cliente_id):
+    try:
+        # Filtramos todos los coches que pertenecen a ese cliente [cite: 149, 155]
+        coches = list(Coche.objects.filter(cliente_id=cliente_id).values("id", "marca", "modelo", "matricula"))
+        return JsonResponse(coches, safe=False)
+    except Cliente.DoesNotExist:
+        return JsonResponse({"error": "Cliente no encontrado"}, status=404)    
+    
+
+@csrf_exempt
+def buscar_coches_por_marca(request, marca):
+    coches = list(Coche.objects.filter(marca__iexact=marca).values("id", "marca", "modelo", "matricula"))
+    return JsonResponse(coches, safe=False)
+
+@csrf_exempt
+def coches_sin_servicios(request):
+    # Busca coches que no tienen entradas en la tabla intermedia CocheServicio
+    coches = list(Coche.objects.filter(cocheservicio__isnull=True).values("marca", "modelo", "matricula"))
+    return JsonResponse(coches, safe=False)
