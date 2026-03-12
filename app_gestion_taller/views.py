@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Cliente, Coche, Servicio, CocheServicio
@@ -6,16 +7,24 @@ from .models import Cliente, Coche, Servicio, CocheServicio
 # --- VISTAS DE CONSULTA (GET) ---
 
 def lista_clientes(request):
-    clientes = list(Cliente.objects.values("id", "nombre", "telefono", "email"))
-    return JsonResponse(clientes, safe=False)
+    clientes = Cliente.objects.all() # Traemos objetos, no diccionarios
+    return render(request, 'app_gestion_coches/lista_clientes.html', {'clientes': clientes})
 
 def detalle_cliente(request, cliente_id):
     try:
-        cliente = Cliente.objects.values("id", "nombre", "telefono", "email").get(id=cliente_id)
-        return JsonResponse(cliente)
+        # Buscamos el cliente y sus coches
+        cliente = Cliente.objects.get(id=cliente_id)
+        coches = Coche.objects.filter(cliente=cliente)
+        
+        contexto = {
+            'cliente': cliente,
+            'coches': coches,
+        }
+        
+        # Renderizamos la plantilla HTML
+        return render(request, 'app_gestion_coches/detalle_cliente.html', contexto)
     except Cliente.DoesNotExist:
         return JsonResponse({"error": "Cliente no encontrado"}, status=404)
-
 # --- VISTAS DE REGISTRO (POST) ---
 
 @csrf_exempt
@@ -95,13 +104,23 @@ def buscar_coche_por_matricula(request, matricula):
         return JsonResponse({"error": "Coche no encontrado"}, status=404)
 
 @csrf_exempt
+@csrf_exempt
 def buscar_servicios_de_coche(request, coche_id):
     try:
+        # Obtenemos el coche por su ID
         coche = Coche.objects.get(id=coche_id)
-        servicios = list(CocheServicio.objects.filter(coche=coche).select_related('servicio').values(
-            "servicio_id", "servicio__nombre", "servicio__descripcion"
-        ))
-        return JsonResponse({"coche": coche.id, "servicios": servicios})
+        
+        # Filtramos los servicios asociados a ese coche
+        coche_servicios = CocheServicio.objects.filter(coche=coche).select_related('servicio')
+        
+        contexto = {
+            'coche': coche,
+            'coche_servicios': coche_servicios,
+        }
+        
+        # Renderizamos la plantilla HTML
+        return render(request, 'app_gestion_coches/servicios_coche.html', contexto)
+    
     except Coche.DoesNotExist:
         return JsonResponse({"error": "Coche no encontrado"}, status=404)
     
@@ -134,6 +153,8 @@ def buscar_coches_por_marca(request, marca):
 
 @csrf_exempt
 def coches_sin_servicios(request):
-    # Busca coches que no tienen entradas en la tabla intermedia CocheServicio
-    coches = list(Coche.objects.filter(cocheservicio__isnull=True).values("marca", "modelo", "matricula"))
-    return JsonResponse(coches, safe=False)
+    # Buscamos los coches que no tienen servicios asociados
+    coches = Coche.objects.filter(cocheservicio__isnull=True)
+    
+    # Renderizamos la nueva plantilla
+    return render(request, 'app_gestion_coches/coches_sin_servicios.html', {'coches': coches})

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Coches sin servicios</title>
+</head>
+<body>
+    <h1>Coches sin historial de reparaciones</h1>
+    
+    {% if coches %}
+        <p>Los siguientes coches están registrados pero aún no han pasado por el taller:</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Matrícula</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coche in coches %}
+                <tr>
+                    <td>{{ coche.marca }}</td>
+                    <td>{{ coche.modelo }}</td>
+                    <td>{{ coche.matricula }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Todos los coches registrados tienen al menos un servicio realizado.</p>
+    {% endif %}
+    
+    <br>
+    <a href="{% url 'lista_clientes' %}">Volver a la lista de clientes</a>
+</body>
+</html>
