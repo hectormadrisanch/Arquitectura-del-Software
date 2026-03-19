@@ -10,7 +10,11 @@ from .views import (
     buscar_cliente,          
     buscar_coches_de_cliente,
     buscar_coches_por_marca,
-    coches_sin_servicios
+    coches_sin_servicios,
+    nuevo_cliente,
+    nuevo_coche,
+    nuevo_servicio,
+    contratar_servicio
 )
 
 urlpatterns = [
@@ -25,5 +29,8 @@ urlpatterns = [
     path('clientes/<int:cliente_id>/coches/', buscar_coches_de_cliente, name='buscar_coches_de_cliente'),
     path('coches/marca/<str:marca>/', buscar_coches_por_marca, name='buscar_coches_por_marca'),
     path('coches/sin-servicios/', coches_sin_servicios, name='coches_sin_servicios'),
-
+    path('clientes/nuevo/', nuevo_cliente, name='nuevo_cliente'),
+    path('coches/nuevo/', nuevo_coche, name='nuevo_coche'),
+    path('servicios/nuevo/', nuevo_servicio, name='nuevo_servicio'),
+    path('servicios/contratar/', contratar_servicio, name='contratar_servicio'),
 ]

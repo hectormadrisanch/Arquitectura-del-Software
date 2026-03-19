@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Cliente, Coche, Servicio, CocheServicio
+from django.shortcuts import render, redirect
+from .forms import ClienteForm
+from .forms import CocheForm, ServicioForm, ContratarServicioForm
 
 # --- VISTAS DE CONSULTA (GET) ---
 
@@ -158,3 +161,48 @@ def coches_sin_servicios(request):
     
     # Renderizamos la nueva plantilla
     return render(request, 'app_gestion_coches/coches_sin_servicios.html', {'coches': coches})
+
+def nuevo_cliente(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        if form.is_valid():
+            form.save() # Guarda el cliente en la base de datos automáticamente
+            return redirect('lista_clientes') # Nos devuelve a la lista
+    else:
+        form = ClienteForm()
+    
+    return render(request, 'app_gestion_coches/formulario.html', {
+        'form': form, 
+        'titulo': 'Nuevo Cliente'
+    })
+
+def nuevo_coche(request):
+    if request.method == 'POST':
+        form = CocheForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes') # O a una lista de coches si la tienes
+    else:
+        form = CocheForm()
+    return render(request, 'app_gestion_coches/formulario.html', {'form': form, 'titulo': 'Nuevo Coche'})
+
+def nuevo_servicio(request):
+    if request.method == 'POST':
+        form = ServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes')
+    else:
+        form = ServicioForm()
+    return render(request, 'app_gestion_coches/formulario.html', {'form': form, 'titulo': 'Nuevo Servicio'})
+
+
+def contratar_servicio(request):
+    if request.method == 'POST':
+        form = ContratarServicioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_clientes')
+    else:
+        form = ContratarServicioForm()
+    return render(request, 'app_gestion_coches/formulario.html', {'form': form, 'titulo': 'Asignar Servicio a Coche'})

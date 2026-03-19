@@ -6,6 +6,14 @@
 </head>
 <body>
     <h1>Clientes del taller</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'nuevo_cliente' %}"> Añadir Cliente</a> | 
+        <a href="{% url 'nuevo_coche' %}"> Registrar Coche</a> | 
+        <a href="{% url 'nuevo_servicio' %}"> Crear Servicio</a> 
+        <a href="{% url 'contratar_servicio' %}"> Contratar Servicio</a>
+    </div>
+
     <table border="1">
         <thead>
             <tr>
